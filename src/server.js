@@ -14,7 +14,7 @@ import cookieParser from "cookie-parser";
 class Server {
     constructor() {
         this.server = express();
-        this.port = 8085;
+        this.port = process.env.PORT || 8080;
         this.routes = new MainRouter();
         this.setupServer();
         this.setupAuth();

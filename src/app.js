@@ -1,18 +1,8 @@
 // src/app.js
 import Server from "./server.js";
-global.DEV = 1;
-const userRoles = [
-    { access_auth: 2, name: 'Recepcion', license: null },
-    { access_auth: 1, name: 'Bioquimico', license: null }
-];
-
-const reqRoles = ['SuperAdmin', 'Bioquimico'];
-
-const hasReqRole = reqRoles.some(reqRole =>
-    userRoles.some(userRole => userRole.name === reqRole)
-);
-
-console.log(hasReqRole);
+import 'dotenv/config';
+global.DEV = process.env.DEV === 'true' ? true : false;
+console.log(DEV);
 class App {
     constructor() {
         this.server = new Server();

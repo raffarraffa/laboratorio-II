@@ -2,14 +2,17 @@ import DataBase from "../config/dataBase.js";
 import InitModels from "../models/initModels.js";
 import puppeteer from 'puppeteer';
 import { Utils } from "../utils/utils.js";
+import 'dotenv/config';
 
 class Controller {
 
     constructor() {
-        // Inicializar la base de datos
-        this.dataBase = new DataBase("lis_new", "root", "", { host: "localhost", dialect: "mysql", });
-        // this.dataBase = new DataBase("lis_new", "root", "", { host: "localhost", dialect: "mysql", logging: false, });
-        // Inicializar los modelos
+        const dbName = process.env.DB_NAME_REMOTO;
+        const dbUser = process.env.DB_USER_REMOTO;
+        const dbPassword = process.env.DB_PASSWORD_REMOTO;
+        const dbHost = process.env.DB_HOST_REMOTO;
+        const dbDialect = process.env.DB_DIALECT_REMOTO;
+        this.dataBase = new DataBase(dbName, dbUser, dbPassword, { host: dbHost, dialect: dbDialect });
         this.models = InitModels.getModels(this.dataBase.sequelize);
         this.class = Utils.getClassName();
     }

@@ -1,9 +1,10 @@
 import Controller from './controller.js';
 import { Utils } from '../utils/utils.js';
 import jwt from 'jsonwebtoken';
-const JWT_SECRET = 'your-secret-key';
-const PASS_SECRET = 'your-pass-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const PASS_SECRET = process.env.PASS_SECRET || 'your-pass-secret-key';
 import userController from './user.js';
+
 class AuthController extends Controller {
     constructor() {
         super();
@@ -44,16 +45,6 @@ class AuthController extends Controller {
                     const user = await this.userController.findByEmail(username);
                     console.log(user);
                     if (user && this.verifyPass(user, password)) {
-                        /*
-                        {
-                            id: 1,
-                            email: 'admin@admin.com',
-                            first_name: 'Rafa',
-                            last_name: 'Lopez',
-                            password: 'eyJhbGciOiJIUzI1NiJ9.MTIzNA.ecFEOIfC_eow1IJuRguQZEfmcTf4gY1UqJ72XYio3co',
-                            profiles: [ { access_auth: 1, name: 'Administrator', license: null } ]
-                        }
-                        */
                         req.session.user = {
                             userId: user.id,
                             roles: user.profiles,
@@ -86,95 +77,6 @@ class AuthController extends Controller {
 
         }
     }
-    // async isAuth(req, res, next) {
-
-    //     //const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    //     const authToken = req.cookies.authToken;
-    //     try {
-    //         const verifiedToken = this.verifyToken(authToken);
-
-    //         if (authToken && verifiedToken) {
-    //             // tengo token y es valido
-    //             const userData = JSON.parse(verifiedToken.data);
-    //             const user = await this.userController.findByEmail(userData.email);
-    //             //const user = await this.userController.findById(userData.userId);
-    //             console.log('*********************************************');
-    //             console.log('*********************************************');
-    //             console.log('*********************************************');
-
-    //             console.log(jwt.sign('1234', PASS_SECRET));
-    //             console.log('*********************************************');
-
-    //             console.log('*********************************************');
-    //             console.log('*********************************************');
-    //             console.log('*********************************************');
-    //             //    const user_profile = user.profil.id;
-    //             //    console.log(user_profile);
-
-    //             if (req.session.user) {
-    //                 //tengo session
-    //                 Utils.debug(`${this.class} IN SESSION autorizado`, this.class, true);
-    //             }
-    //             else {
-    //                 // no tengo session 
-    //                 req.session.user = {
-    //                     userId: user.id,
-    //                     role: verifiedToken.role,
-    //                     name: verifiedToken.username,
-    //                 };
-    //                 Utils.debug(`${this.class} NO SESSION  autorizado`, this.class, true);
-    //                 res.cookie('authToken', authToken, { httpOnly: true, secure: true, maxAge: 3600000 });
-    //                 next();
-    //             }
-    //         }
-    //         else {
-    //             // no tengo token debo verifiar login            
-    //             if (req.method == 'POST') {
-    //                 const { password, username } = req.body;
-    //                 if (password != '' && username != '') {
-    //                     const user = await this.userController.findByEmail(username);
-    //                     // aca verifico login
-    //                     if (this.verifyPass(user, password)) {
-    //                         req.session.user = {
-    //                             userId: user.id,
-    //                             role: user.profiles,
-    //                             firstName: user.first_name,
-    //                             lastname: user.last_name
-    //                         };
-    //                         const userAuth = {
-    //                             email: user.email,
-    //                             firstName: user.first_name,
-    //                             lastname: user.last_name
-    //                         }
-    //                         const token = this.createToken(userAuth);
-    //                         res.cookie('authToken', token, { httpOnly: true, secure: true, maxAge: 3600000 });
-    //                         res.redirect('/');
-
-    //                     }
-    //                     else {
-    //                         req.flash('error', 'Login erroneo');
-    //                         res.redirect('/');
-    //                     }
-    //                 }
-    //                 else {
-    //                     req.flash('error', 'Faltan datos');
-    //                     res.redirect('/');
-    //                 }
-    //             }
-    //             else {
-    //                 res.render('login.pug');
-    //             }
-
-
-    //         }
-    //     }
-    //     catch (error) {
-
-    //             console.log('error', error);
-    //             res.render('login.pug');
-    //         }
-
-    //     }
     getAuth(req, res) {
         res.render('login.pug');
     }

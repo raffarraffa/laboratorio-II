@@ -1,15 +1,24 @@
 // src/utils/utils.js
-const DEV = false;
+import 'dotenv/config';
+const DEV = process.env.DEV === 'true' ? true : false;
 import puppeteer from "puppeteer";
 import crypto from "crypto";
-// const ALGORITHM = 'aes-256-cbc';
-// const KEY = Buffer.from('your-32-byte-secret-key');
-const ALGORITHM = 'aes-256-cbc';
-//const KEY = crypto.randomBytes(32);
-//const KEY = Buffer.from('5e2c123f4e6c4d3c7d0f2e5f2b3e5d1e3a6e7d5c1b7e4f2b5a7d1e2c3d4f5e6');
-const KEY = Buffer.from('5e2c123f4e6c4d3c7d0f2e5f2b3e5d1e3a6e7d5c1b7e4f2b5a7d1e2c3d4f5e6', 'hex');
-//const IV = Buffer.from('your-16-byte-iv');
-const IV = Buffer.from('b2df428b9929d3ace7c598bbf4e496b2', 'hex');
+// Configuración de cifrado
+const ALGORITHM = process.env.ALGORITHM;
+if (!ALGORITHM) {
+    throw new Error('Environment variable ALGORITHM is not defined');
+}
+
+const KEY = process.env.KEY;
+if (!KEY) {
+    throw new Error('Environment variable KEY is not defined');
+}
+
+const IV = process.env.IV;
+if (!IV) {
+    throw new Error('Environment variable IV is not defined');
+}
+
 
 export class Utils {
     static numRand() {
@@ -60,11 +69,7 @@ export class Utils {
         req.session.tempData = null;
         return data
     }
-    // static getTempData(req, param) {
-    //     const data = req.session[param] ? req.session[param] : null;
-    //     req.session[param] = null;
-    //     return data
-    // }
+
     /**
      * Establece datos temporales en la sesión para usar en otro controlador.
      * @param {false} en caso que no data se establezca el valor de la variable
@@ -82,15 +87,7 @@ export class Utils {
         }
         return false;
     }
-    // static setTempData(req, param, data) {
-    //     if (data) {
-    //         req.session[param] = data;
-    //         return true;
-    //     } else {
-    //         req.session[param] = false;
-    //     }
-    //     return false;
-    // }
+
 
     static async generatePdf(html, header = '') {
         try {
@@ -146,48 +143,17 @@ export class Utils {
         const day = date.getDate();
         return `${year}-${month}-${day}`; // 	dateAux;
     }
-    static encrypt2(data) {
-        const cipher = crypto.createCipheriv(ALGORITHM, KEY, IV);
-        let encrypted = cipher.update(data, 'utf8', 'hex');
+
+    static encrypt(text) {
+        let cipher = crypto.createCipheriv(ALGORITHM, KEY, IV);
+        let encrypted = cipher.update(text, 'utf8', 'hex');
         encrypted += cipher.final('hex');
         return encrypted;
     }
-    static decrypt2(encryptedData) {
-        const decipher = crypto.createDecipheriv(ALGORITHM, KEY, IV);
-        let decrypted = '';
-        decipher.on('readable', () => {
-            let chunk;
-            while (null !== (chunk = decipher.read())) {
-                decrypted += chunk.toString('utf8');
-            }
-        });
-        decipher.on('end', () => {
-            console.log('Desencriptado completado');
-        });
-
-        decipher.write(encryptedData, 'hex');
-        decipher.end();
-
-        return decrypted;
-    }
-
-
-    static encrypt(text) {
-
-        const cipher = crypto.createCipheriv('aes-256-cbc', KEY, IV); // Usa el IV y la clave
-        let encrypted = cipher.update(text, 'utf8', 'hex');
-        encrypted += cipher.final('hex');
-        return iv.toString('hex') + ':' + encrypted;
-    }
-
     static decrypt(text) {
-        const textParts = text.split(':');
-        const iv = Buffer.from(textParts.shift(), 'hex'); // Recupera el IV
-        const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-        const decipher = crypto.createDecipheriv('aes-256-cbc', KEY, IV); // Usa el IV y la clave
-        let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+        let decipher = crypto.createDecipheriv(ALGORITHM, KEY, IV);
+        let decrypted = decipher.update(text, 'hex', 'utf8');
         decrypted += decipher.final('utf8');
         return decrypted;
     }
-
 }
