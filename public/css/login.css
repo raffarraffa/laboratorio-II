@@ -1,0 +1,27 @@
+#mainRow {
+    margin: auto;
+    border: 2px solid rgb(93, 55, 233);
+    border-radius: 10px;
+    filter: drop-shadow(1px 2px 5px rgb(176, 175, 175));
+    padding: 1px;
+}
+
+#logo {
+    position: absolute;
+    /* width: 50px;
+    height: 50px; */
+    bottom: 95%;
+    /* Ajusta la posición superior */
+    left: 50%;
+    /* Centra horizontalmente */
+    transform: translateX(-50%);
+    /* Ajusta para centrar */
+}
+
+#eye {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    transform: translatey(-50%);
+
+}

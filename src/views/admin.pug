@@ -1,0 +1,402 @@
+extends layout.pug
+
+block content-1
+    style.
+        .table-custom {
+            border: none;
+        }
+        .table-custom .row {
+            border-bottom: none;
+        }
+        .table-custom .cell {
+            padding: 8px;
+            text-align: center;
+        }
+        .col-1{
+            width: 25px;
+        }
+        .col1,.col2,.col3,.col4,.col5,.col6,.col7,.col8,.col9,.col10,.col11, .col12, .col13{
+            border-bottom: 1px solid #ddd;     
+            text-align: center;
+            border:none;
+            border-left: 1px solid #ddd;
+
+        } 
+        .col1{
+            width: 100px;
+            border: none;
+        }
+        .col2{
+            width: 150px;
+            border: none;
+        }
+        .col10{
+            width: 180px;
+        }
+        .col5{
+            width: 100px
+        }
+    - var exams = adminData.exams;
+    - var determinations = adminData.determinations;
+    - var referenceValues = adminData.referenceValues;
+    - var units = adminData.units;
+    - var examsInUse=adminData.examsInUse;
+    - var determinationsInUse = adminData.determinationsInUse;
+    - var samplesInUse = adminData.samplesInUse
+    div.container#mainContainer
+        div.innerContainer                     
+            div(class="accordion" id="adminTabla")
+                //- Determinaciones
+                div(class="accordion-item")
+                    h2(class="accordion-header")
+                        button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#determinationDiv" aria-expanded="false" aria-controls="determinationDiv")
+                            Accordion Determinaciones
+                    div(id="determinationDiv" class="accordion-collapse collapse" data-bs-parent="#adminTabla" style="")
+                        div(class="accordion-body sector-data")
+                            table.table.table-striped.table-bordered.table-responsive
+                                thead.table-dark
+                                    tr
+                                        th.cell.col-1.col1(style="width:50px;") Admin
+                                        th.cell.col-1.col10.w-50 Nombre 
+                                        th.cell.col-1.col10.w-50 Observacion
+                                tbody 
+                                    tr
+                                        form(id="determinationNew" data-form-id='0' action="determination/new" method="POST") 
+                                            td.cell.col-1.col1 
+                                                button.btn.btn-outline-primary.p-1.mx-0.my-1.mx-1.w-15(type="submit" name="action" value="create" form="determinationNew") Guardar
+                                                //- Nombre
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="name" value="" required placeholder="Nombre ")
+                                                //-Observacion
+                                                td.cell.col-1.col2 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="observation" value="" required placeholder="Observacion")
+                                    each data in determinations                                    
+                                        //- - let dataInUse = ""
+                                        //- - let readOnly=""                                        
+                                        //- - dataInUse = adminData.samplesInUse.includes(data.id)? false : true
+                                        //- - read = adminData.samplesInUse.includes(data.id)? true : false
+                                        form(id=`determinationEdit${data.id}` data-form-id='0' onsubmit=`return confirm('Are you sure?')` action="admin?dev=1" method="POST") 
+                                            tr(id=`determination${data.id}`)
+                                                td.cell.col-1.col1
+                                                    span( hidden = read) 
+                                                        button.btn.btn-outline-primary.p-1.mx-0.my-1.w-20(type="button" name="action" value="create"  onclick=`alert('click')` ) 
+                                                            i.bi.bi-pencil-fill.me-3
+                                                            | Editar #{data.id}
+                                                //- Nombre
+                                                td.cell.col-1.col2
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="name" value=data.name required placeholder="Nombre" id=`determinationName${data.id}` readonly data-read =`${read}` )
+                                                //- Unidad
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="observation" value=data.observation  required placeholder="Observacion" id=`observation${data.id}` readonly data-read =`${read}`)
+                //- Unidades
+                div(class="accordion-item")
+                    h2(class="accordion-header")
+                        button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#unitDiv" aria-expanded="false" aria-controls="unitDiv")
+                            Accordion Unidades
+                    div(id="unitDiv" class="accordion-collapse collapse" data-bs-parent="#adminTabla" style="")
+                        div(class="accordion-body sector-data")
+                            table.table.table-striped.table-bordered.table-responsive
+                                thead.table-dark
+                                    tr
+                                        th.cell.col-1.col1(style="width:50px;") Admin
+                                        th.cell.col-1.col10.w-50 Nombre 
+                                        th.cell.col-1.col10.w-50 Unidad
+
+                                tbody 
+                                    tr
+                                        form(id="unitNew" data-form-id='0' action="unit/new" method="POST") 
+                                            td.cell.col-1.col1 
+                                                button.btn.btn-outline-primary.p-1.mx-0.my-1.mx-1.w-15(type="submit" name="action" value="create" form="unitNew") Guardar
+                                                //- Nombre
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="name" value="" required placeholder="Nombre ")
+                                                //-Unidad
+                                                td.cell.col-1.col2 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="unit" value="" required placeholder="Unidad")
+                                    each data in units                                    
+                                        //- - let dataInUse = ""
+                                        //- - let readOnly=""                                        
+                                        //- - dataInUse = adminData.samplesInUse.includes(data.id)? false : true
+                                        //- - read = adminData.samplesInUse.includes(data.id)? true : false
+                                        form(id=`unitEdit${data.id}` data-form-id='0' onsubmit=`return confirm('Are you sure?')` action="admin?dev=1" method="POST") 
+                                            tr(id=`sampleType${data.id}`)
+                                                td.cell.col-1.col1
+                                                    span( hidden = read) 
+                                                        button.btn.btn-outline-primary.p-1.mx-0.my-1.w-20(type="button" name="action" value="create"  onclick=`alert('click')` ) 
+                                                            i.bi.bi-pencil-fill.me-3
+                                                            | Editar #{data.id}
+                                                //- Nombre
+                                                td.cell.col-1.col2
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="names" value=data.name required placeholder="Nombre" id=`unitName${data.id}` readonly data-read =`${read}` )
+                                                //- Unidad
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="unit" value=data.unit  required placeholder="Unidad" id=`unit${data.id}` readonly data-read =`${read}`)
+                //- Valores Referencia
+                div(class="accordion-item")
+                    h2(class="accordion-header")
+                        button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#referenceDiv" aria-expanded="false" aria-controls="referenceDiv")
+                            Accordion Valores Referencia
+                    div(id="referenceDiv" class="accordion-collapse collapse" data-bs-parent="#adminTabla" style="")
+                        div(class="accordion-body sector-data")
+                            table.table.table-striped.table-bordered.table-responsive
+                                thead.table-dark
+                                    tr
+                                        th.cell.col-1.col1(style="width:50px;") Admin
+                                        th.cell.col-1 Sexo 
+                                        th.cell.col-1.col3 Edad min
+                                        th.cell.col-1.col4 Edad max
+                                        th.cell.w-5 Embarazo
+                                        th.cell.col-1.col6 Valor min
+                                        th.cell.col-1.col7 Valor max
+                                        th.cell.col-1.col8 V. Ref min
+                                        th.cell.col-1.col9 V.Ref max
+                                        th.cell.col-1.col10 Detalle
+                                        th.cell.col-1.col11 Activo
+                                        th.cell.col-1.col12 Determinacion
+                                        th.cell.col-1.col13.w-5 Default
+                                        th.cell.col-1.w-10 Unidad
+                                tbody 
+                                    tr  
+                                        form(id=`referenceValueNew` data-form-id='0' action="referenceValue/new" method="POST") 
+                                            td.cell.col-1.col1 
+                                                button.btn.btn-outline-primary.p-1.mx-0.my-1.mx-1.w-15(type="submit" name="action" value="create" form="referenceValueNew") Guardar
+                                                td.cell.col-1 
+                                                    div.form-group.mt-1
+                                                        input(type="radio" id="male" name="sex" value="M" checked ) 
+                                                        label.me-1(for="male" required) M
+                                                        input(type="radio" id="female" name="sex" value="F")
+                                                        label.me-1(for="female" required) F
+                                                //- Age min input
+                                                td.cell.col-1.col3 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="age_min" value="" required placeholder="Edad Min")
+                                                //- Age max input   
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="age_max" value="" required placeholder="Edad Max")
+                                                //- Pregnant input    
+                                                td.cell
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-5(type="text" name="pregnant" value="0" placeholder="Embarazo")
+                                                //- Value min input    
+                                                td.cell.col-1.col6 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_min" value="" required placeholder="Valor Min")
+                                                //- Value max input    
+                                                td.cell.col-1.col7 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_max" value="" required placeholder="Valor Max")
+                                                //- Value reference min input    
+                                                td.cell.col-1.col8 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_ref_min" value="" required placeholder="V. Ref Min")
+                                                //- Value reference max input    
+                                                td.cell.col-1.col9 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_ref_max" value="" required placeholder="V. Ref Max")
+                                                //- Observation input    
+                                                td.cell.col-1.col10
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="observation" value="" required placeholder="Observacion")
+                                                //- Active input    
+                                                td.cell.col-1.col11
+                                                    input.form-check-input.border.rounded.border-primary.p-1.mx-0.my-1.w-5(type="checkbox" role="switch" name="active" value=true  checked disabled=true)  
+                                                td.cell.col-1.col12
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="determinations_id" value="")
+                                                        option(value="",  disabled, selected) Determiacion
+                                                        each determ in adminData.determinations
+                                                            option(value=determ.id) #{determ.name}
+                                                //- Default input No requerido    
+                                                td.cell.col-1.col13                                                
+                                                    input.form-check-input.w-5(type="checkbox" role="switch" name="dflt" value=1 )
+                                                td.cell.col-1
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="unit_id" value=""  required )
+                                                        option(value="",  disabled, selected) Unidad
+                                                        each unit in adminData.units
+                                                            option(value=unit.id) #{unit.name}
+                                    each data in adminData.referenceValues
+                                        - let dataInUse = ""
+                                        - let readOnly=""
+                                        //-determinationsInUse
+                                        - dataInUse = adminData.determinationsInUse.includes(data.id)?false:true
+                                        - read = adminData.determinationsInUse.includes(data.id)? true : false
+                                        form(id=`referenceEdit${data.id}` data-form-id='0' onsubmit=`return confirm('Are you sure?')` action="admin?dev=1" method="POST") 
+                                            tr(id=`reference${data.id}`)
+                                                td.cell.col-1.col1
+                                                    span( hidden = read) 
+                                                        button.btn.btn-outline-primary.p-1.mx-0.my-1.mx-.w-20(type="button" name="action" value="create"  onclick=`alert('click')` ) 
+                                                            i.bi.bi-pencil-fill.me-3
+                                                            | Editar #{data.id}
+                                                td.cell.col-1
+                                                    div.form-group.mt-1
+                                                        input(type="radio" id="male" name="sex" value="M" checked  = (data.sex=='M')) 
+                                                        label.me-1(for="male") M
+                                                        input(type="radio" id="female" name="sex" value="F"  checked  = (data.sex=='F')) 
+                                                        label.me-1(for="female") F
+                                                td.cell.col-1.col3 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="age_min" value=`${data.age_min}` id=`ageMinRef${data.id}` readonly data-read =`${read}` )
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="age_max" value=`${data.age_max}` id=`ageMaxRef${data.id}` readonly data-read =`${read}` )
+                                                td.cell
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-5(type="text" name="pregnant" value=`${(data.pregnant==1 && data.sex=='F')?"Si":(data.sex=='M')?"--":"No"}` id=`pregnantRef${data.id}` readonly data-read =`${read}` )
+                                                td.cell.col-1.col6 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_min" value=`${data.value_min}` id=`valueMinRef${data.id}` readonly data-read =`${read}` )
+                                                td.cell.col-1.col7
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_max" value=`${data.value_max}` id=`valueMaxRef${data.id}` readonly data-read =`${read}` )                                                
+                                                td.cell.col-1.col8
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_ref_min" value=`${data.value_ref_min}` id=`valueRefMinRef${data.id}` readonly data-read =`${read}` )
+                                                td.cell.col-1.col9
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-15(type="text" name="value_ref_max" value=`${data.value_ref_max}` id=`valueRefMaxRef${data.id}` readonly data-read =`${read}` )
+                                                td.cell.col-1.col10
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="observation" value=`${data.observation}` id=`obsRef${data.id}` readonly data-read =`${read}` )
+                                                td.cell.col-1.col11
+                                                    input.form-check-input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="checkbox" role="switch" name="active" value=true id=`activeRef${data.id}`  data-read =`${read}` checked=data.active disabled = data.active)
+                                                td.cell.col-1.col12
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="determination_id" value="" id=`determinationRef${data.id}`  data-read =`${read}` disabled )
+                                                        each determ in adminData.determinations
+                                                            option(value=determ.id selected=(determ.id == data.determinations_id)) #{determ.name}
+                                                td.cell.col-1.col13                                                
+                                                    input.form-check-input.w-5(type="checkbox" role="switch" name="dflt" value=true id=`dfltRef${data.id}` checked=data.dflt disabled )
+                                                td.cell.col-1
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="unit_id" value=`${data.unitName}` id=`unitRef${data.id}`  data-read =`${read}` disabled )
+                                                        each unit in adminData.units
+                                                            option(value=unit.id selected=(unit.id == data.units_id)) #{unit.name}
+                //- Seccion Tipos Muestras
+                div(class="accordion-item")
+                    h2(class="accordion-header")
+                        button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sampleTypeDiv" aria-expanded="false" aria-controls="sampleTypeDiv")
+                            Accordion Tipos de Muestras
+                    div(id="sampleTypeDiv" class="accordion-collapse collapse" data-bs-parent="#adminTabla" style="")
+                        div(class="accordion-body sector-data")
+                            table.table.table-striped.table-bordered.table-responsive
+                                thead.table-dark
+                                    tr
+                                        th.cell.col-1.col1(style="width:50px;") Admin
+                                        th.cell.col-1.col10.w-25 Nombre 
+                                        th.cell.col-1.col10.w-100 Descripcion
+                                        th.cell.col-1.col4 Activa
+                                tbody 
+                                    tr
+                                        form(id="sampleTypeNew" data-form-id='0' action="sampleType/new" method="POST") 
+                                            td.cell.col-1.col1 
+                                                button.btn.btn-outline-primary.p-1.mx-0.my-1.mx-1.w-15(type="submit" name="action" value="create" form="sampleTypeNew") Guardar
+                                                //- Nombre
+                                                td.cell.col-1.col2 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="name" value="" required placeholder="Nombre de Muesta")
+                                                //- Decripcion muestra
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="description" value="" required placeholder="Descripcion")
+                                                //- Active input    
+                                                td.cell.col-1.col11
+                                                    input.form-check-input.w-5(type="checkbox" role="switch" name="active" value=true  checked disabled=true)  
+                                    each data in adminData.sampleType
+                                        - let dataInUse = ""
+                                        - let readOnly=""
+                                        //-samplesTypeInUse
+                                        - dataInUse = adminData.samplesInUse.includes(data.id)? false : true
+                                        - read = adminData.samplesInUse.includes(data.id)? true : false
+                                        form(id=`sampleTypeEdit${data.id}` data-form-id='0' onsubmit=`return confirm('Are you sure?')` action="admin?dev=1" method="POST") 
+                                            tr(id=`sampleType${data.id}`)
+                                                td.cell.col-1.col1
+                                                    span( hidden = read) 
+                                                        button.btn.btn-outline-primary.p-1.mx-0.my-1.w-20(type="button" name="action" value="create"  onclick=`alert('click')` ) 
+                                                            i.bi.bi-pencil-fill.me-3
+                                                            | Editar #{data.id}
+                                                //- Nombre
+                                                td.cell.col-1.col2
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="name" value=data.name required placeholder="Nombre de Muesta" id=`valueSampleTypeName${data.id}` readonly data-read =`${read}` )
+                                                //- Decripcion muestra
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="description" value=data.description  required placeholder="Descripcion" id=`valueSampleTypeDescription${data.id}` readonly data-read =`${read}`)
+                                                //- Active input    
+                                                td.cell.col-1.col11
+                                                    input.form-check-input.w-5(type="checkbox" role="switch" name="active" value=true  checked disabled=true)  
+                //- Exams
+                div(class="accordion-item")
+                    h2(class="accordion-header")
+                        button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#examDiv" aria-expanded="false" aria-controls="examDiv")
+                            Accordion Examenes
+                    div(id="examDiv" class="accordion-collapse collapse" data-bs-parent="#adminTabla" style="")
+                        div(class="accordion-body sector-data")
+                            table.table.table-striped.table-bordered.table-responsive
+                                thead.table-dark
+                                    tr
+                                        th.cell.col-1.col1(style="width:50px;") Admin
+                                        th.cell.col-1.col10.w-15 NBU 
+                                        th.cell.col-1.col10.w-50 Detalle
+                                        th.cell.col-1.col10.w-10 Tiempo Proces.                                        
+                                        th.cell.col-1.col10.w-10 Activo
+                                        th.cell.col-1.col10.w-25 Muestra
+                                        th.cell.col-1.col10.w-25 Determinaciones
+                                tbody 
+                                    tr
+                                        form(id="examNew" data-form-id='0' action="exam/new" method="POST") 
+                                            td.cell.col-1.col1 
+                                                button.btn.btn-outline-primary.p-1.mx-0.my-1.mx-1.w-15(type="submit" name="action" value="create" form="examNew") Guardar
+                                                //- NBU
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="nbu" value="" required placeholder="NBU ")
+                                                //-Unidad
+                                                td.cell.col-1.col2 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="detail" value="" required placeholder="Detalle")
+                                                td.cell.col-1.col2 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="time" value="" required placeholder="Tiempo" title="Tiempo para procesar el Examen")
+                                                //- Active input    
+                                                td.cell.col-1.col11
+                                                    input.form-check-input.border.rounded.border-primary.p-1.mx-0.my-1.w-5(type="checkbox" role="switch" name="active" value=true  checked disabled=true)                                                  
+                                                td.cell.col-1.col12
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="samples_type_id" value="")
+                                                        option(value="",  disabled, selected) Tipo Muestra
+                                                        each sample in adminData.sampleType
+                                                            option(value=sample.id) #{sample.name}
+                                                td.cell.col-1.col12
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="determinations[]" value="" multiple)
+                                                        option(value="",  disabled, selected) Seleccione todas las determinaciones
+                                                            each det in adminData.determinations
+                                                                option(value=det.id )  #{det.name}
+                                    each data in exams                                        
+                                        - let idDt = data.determinations.map(dt => dt.id)                                        
+                                        form(id=`examEdit${data.id}` data-form-id='0' onsubmit=`return confirm('Are you sure?')` action="admin?dev=1" method="POST") 
+                                            tr(id=`exam${data.id}`)
+                                                td.cell.col-1.col1
+                                                    span( hidden = read) 
+                                                        button.btn.btn-outline-primary.p-1.mx-0.my-1.w-20(type="button" name="action" value="create"  onclick=`alert('click')` ) 
+                                                            i.bi.bi-pencil-fill.me-3
+                                                            | Editar #{data.id}
+                                                //- NBU
+                                                td.cell.col-1.col2
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="nbu" value=data.nbu required placeholder="Nbu" id=`examNbu${data.id}` readonly data-read =`${read}` )
+                                                //- Detalle
+                                                td.cell.col-1.col4 
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="detail" value=data.detail  required placeholder="Detalle" id=`examDetail${data.id}` readonly data-read =`${read}`)                
+                                                //- Tiempo procesamiento
+                                                td.cell.col-1.col2
+                                                    input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="text" name="time" value=data.time required placeholder="Timepo" id=`examTime${data.id}` readonly data-read =`${read}` )
+                                                //- Activa
+                                                td.cell.col-1.col11
+                                                    input.form-check-input.border.rounded.border-primary.p-1.mx-0.my-1.w-100(type="checkbox" role="switch" name="status" value=true id=`examStatus${data.id}`  data-read =`${read}` checked=data.active disabled = data.active)
+
+                                                td.cell.col-1.col12
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="samples_type_id" value="" disabled)
+                                                        option(value="",  disabled, selected) Tipo Muestra
+                                                        each sample in adminData.sampleType
+                                                            option(value=sample.id selected=(sample.id == data.samples_type_id)) #{sample.name}
+                                                td.cell.col-1.col12
+                                                    select.border.rounded.border-primary.p-1.mx-0.my-1.w-100( name="determinations[]" value="" multiple disabled)
+                                                        //- option(value="",  disabled,  Seleccione todas las determinaciones
+                                                        each det in adminData.determinations
+                                                            option(value=det.id  selected = (idDt.includes(det.id))) #{det.name}
+            //- Area contenido
+            div#contentArea
+                h4.text-decoration-underline Carga de datos: 
+                p Existen dependencia directa entre Examenes, Determinaciones, Valores de Referencia y Unidades
+                ol 
+                    li <b> Determinaciones</b> no posee dependecia  deberian ser cargadas en primera instancia <em>(Verifique si ya existe una determincion para el intrumeno que la usara, son dependientes del instrumento que utilice)  
+                    li <b> Unidades</b> nuevas no posee dependecias pueden ser cargadas en primer instancia <em>(verifique si ya existe la unidad requerida)</em>
+                    li <b>Valores de Referencia</b>, tienen dependencia entre <b>Unidades</b> y <b>  Determinaciones </b> <em>(verifique Dependecias, si no existe crearlas antes)</em>
+                    li <b>Examenes</b>, tienen multiple dependencia con <b>Determinaciones</b> <em>(verifique Dependecias, si no existe crearlas antes)</em>
+    script.
+        const adminData = !{JSON.stringify(adminData)};
+    script(src="/js/tablaAdmin.js")
+
+
+        // -
+            label(for="mySelect") Choose an option:
+                input#mySelect(list="options")
+                datalist#options
+                option(value="Option 1") Option 1
+                option(value="Option 2") Option 2
+                option(value="Option 3") Option 3
+                option(value="Option 4") Option 4

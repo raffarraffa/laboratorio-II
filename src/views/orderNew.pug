@@ -1,0 +1,95 @@
+//- extends layout.pug
+block content-1
+div.card#buttonsOrder
+    div.card-header(style="max-height:4em; overflow:auto")
+        h4(class="text-center") Nueva orden paciente: #{order.patient.last_name}, #{order.patient.first_name}
+    div.card-body
+        form(id="formNewOrder" method="POST" action="/order/create")
+            div.d-flex.flex-row
+                div.form-group.w-50.me-1
+                    label(class="form-label" for="doctorDiv" ) Medico:
+                    div.form-control(style="height:12em; overflow:auto;" id="doctorDiv")
+                        table(id="doctorSelect" class="table")
+                            thead
+                                tr
+                                    th 
+                                    th 
+                            tbody
+                                each data in order.doctors
+                                    tr
+                                        td
+                                            input(type="radio" name="doctorsId" value=`${data.id}` checked = (data.id == order.doctorId) onfocus= (data.id == order.doctorId))
+                                        td
+                                            p() licencia: #{data.license} #{data.first_name} #{data.last_name}    
+                div.form-group.w-50.ms-1
+                    label(class="form-label" for="diagnosisDiv" ) Diagnostico:
+                    div.form-control(style="height:12em; overflow:auto;" id="diagnosisDiv")
+                        table(id="diagnosisSelect" class="table")                    
+                            thead(class="")
+                                tr
+                                    th 
+                                    th 
+                            tbody                
+                                each data in order.diagnosis 
+                                    tr
+                                        td 
+                                            input(type="radio" name="diagnosisId" value=`${data.id}`) 
+                                        td
+                                            p() #{data.codigo} #{data.name}
+            div.form-group.d-none
+                label(class="form-label" for="samplesDiv") Muestras Requerida:  marque si el paciente entrega ahora muestra
+                div.form-control(style="height:5em; overflow:auto;" id="samplesDiv")
+                    p#noMuestras No hay Estudios seleccionados, no tiene muestras para seleccion..
+                    each data in order.samplesType
+                        label.me-2.sample-radio.d-none(for=`sample${data.id}` id=`labelSample${data.id}` name="sampleLabel" data-id=`${data.id}`) #{data.name}
+                            input(type="checkbox" id=`sample${data.id}` name="samples[]" value=`${data.id}` data-id=`${data.id}`)  
+                        input.d-none(type="checkbox" id=`sampleRequired${data.id}` name="samplesRequired[]" value=`${data.id}` data-id=`${data.id}`) 
+            div.form-group
+                label(class="form-label" id="examsDiv") Examenes:                
+                div.form-control(style="height:15em; overflow:auto;" id="examsDiv")
+                    table(id="examsSelect" class="tableFixed")                    
+                        thead
+                            tr
+                                th 
+                        tbody
+                            each data in order.exams
+                                tr
+                                    td                              
+                                        input(type="checkbox" id=`exams${data.id}` name="exams[]" value=`${data.id}` data-sample=`${data.sampleType.id}`)
+                                        label(for=`exams${data.id}` ) #{data.nbu} #{data.detail} 
+
+            div.form-group
+                label.mt-2 Observaciones:
+                textarea.form-control(rows="2" cols="150" placeholder="Ingrese observaciones sobre la orden" name="observation" value='' id="observation").w-100
+                br
+            input.d-none(type="number" name="patientsId" id="patients_id" value=`${order.patient.id}`)    
+    div.modal-footer
+        button.btn.btn-outline-warning(type="submit" form="formNewOrder" data-bs-dismiss="modal") Guardar 
+        button.btn.btn-outline-warning(type="reset" data-bs-dismiss="modal") Cancelar
+div#newDoctorModal.modal.modal-xl(data-bs-backdrop="static" aria-hidden="false" aria-labelledby="modalOrderLabel" role="dialog")
+    div.modal-dialog.modal-dialog-centered(role="document")
+        div.modal-content.p-2.h-100#doctorModal     
+            form(id="formNewDoctor" method="POST" action="/doctor/new")
+                div.modal-header                            
+                    h5.modal-title Formulario Nuevo Doctor
+                div.modal-body                   
+                    div.form-group
+                        p paciente #{order.patient.last_name}, #{order.patient.first_name}
+                        input(type="number" name="patient_id" id="patientId" value=`${order.patient.id}` hidden )
+                        input(type="number" name="active" id="active" value="1" hidden)
+                    div.form-group
+                        label(for="first_name") Nombre:
+                        input.form-control(type="text" id="first_name" name="first_name" )
+                    div.form-group
+                        label(for="last_name") Apellido:
+                        input.form-control(type="text" id="last_name" name="last_name"  )
+                    div.form-group
+                        label(for="document") Licencia:
+                        input.form-control(type="number" id="licencia" name="licenseData")                        
+                    div.form-group
+                        label(for="phone") Teléfono:
+                        input.form-control(type="number" id="phone" name="phone" onfocus="this.removeAttribute('readonly');" readonly)
+                div.modal-footer        
+                    button.btn.btn-outline-warning(type="submit" form="formNewDoctor" data-bs-dismiss="modal") Guardar   
+                    button.btn.btn-outline-warning(type="reset" data-bs-dismiss="modal" onclick="verModalOrder()") Cancelar    
+script(src="/js/newOrder.js")

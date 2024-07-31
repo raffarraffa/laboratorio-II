@@ -1,0 +1,72 @@
+//- extends layout.pug
+block content-1
+//- - var checked
+//- - var visible ='d-none'
+- var statusOrderName = ['Inactiva', 'Ingresada', 'Toma Muestra', 'Analitica', 'Para firma', 'Firmada']
+- var statusSampleName =[ 'Requerida', 'Recibida', 'Procesada', 'Rechazada']
+//- - var fechaOrden = new Date(order.orderData.created_at);
+//- - var editable=order.orderData.editable;
+div.card
+    div.card-header.p-0.mt-1
+    h1.text-center Orden #{order.id}
+    div.card-body
+        form(id="formNew" method="POST" action='/order/edit')
+            div.d-flex.flex-row
+                div.form-group.w-50.me-1
+                    label(class="form-label" for="pacienteDiv" ) Detalle:
+                    div.form-control(style="height:8em; overflow:auto;" id="pacienteDiv")
+                        p.p-0.m-0 Paciente: #{order.patient.last_name}, #{order.patient.first_name}. DNI: #{order.patient.document}. Edad: #{order.patient.edad}
+                        p.p-0.m-0 Solicitado:  #{order.doctor.last_name}, #{order.doctor.first_name}. Matricula: #{order.doctor.license}
+                        p.p-0.m-0 Diagnostico: #{order.diagnosis.codigo} , #{order.diagnosis.name}
+                div.form-group.w-50.me-1
+                    label(class="form-label" for="pacienteDiv" ) Examenes:
+                    div.form-control(style="height:8em; overflow:auto;" id="pacienteDiv")            
+                        each studie in order.studies
+                            p.p-0.m-0 #{studie.exam.detail}
+                        //- input(type="hidden" name="orderId" value= order.orderData.id)
+            div.form-group.mt-2
+                div.form-group
+                    label(class="form-label" for="statusDiv") Estado de la Orden
+                    div.form-control.w-100(style="height:2.5em; overflow:auto;" id="statusDiv")
+                        each data in statusOrderName
+                            //-     //- label.me-2.sample-radio(for=`${data}` id=`${data}` name="status" ) #{data}
+                            input(type="radio" id=`${data}` name="status" value=`${data}` checked = (data == order.status))
+                            label.me-2.sample-radio(for=`${data}` id=`${data}` name="status" ) #{data}
+            div.form-group
+                div.form-group
+                    label(class="form-label" for="samplesDiv") Muestras
+                    div.form-control(style="height:auto; overflow:auto;" id="samplesDiv")
+                        each data in order.samples
+                            div.form-control.m-0.my-1( id="statusDiv")
+                                label.me-2(class="form-label" for="statusDiv") <b> #{data.sampleType.name}  #{data.status}</b>
+                                each statusData in statusSampleName
+                                    input(type="radio" id=`${statusData}-${data.id}` name=`samples[${data.id}]` data-id=`${data.id}` value=`{"${data.id}":"${statusData}"}` checked = (statusData == data.status))
+                                    label.m-0.sample-radio(for=`${statusData}-${data.id}` ) #{statusData}
+            div.form-group
+                div.form-group
+                    label(class="form-label" for="resultDiv") Resultados
+                    div.form-control(style="height:auto; overflow:auto;" id="resultDiv")
+                        each data in order.studies
+                            div.form-control.m-0.my-1()
+                                p #{data.exam.nbu}: <b>#{data.exam.detail}</b>
+                                each determination in data.exam.determinations 
+                                    p #{determination.name}
+
+            //- each data in order.studies
+            //-     p <b>#{data.exam.detail}</b>
+            //-     each determination in data.exam.determinations
+            //-         //- p #{determination.id}
+            //-         p #{determination.name}
+            //-     //- each data2 in  data.deteminations
+            //-     //-     p #{data2.id}
+
+
+            //- div.form-group
+            //-     label.mt-2 Observaciones:
+            //-     //- textarea.form-control(rows="2" cols="150" placeholder="Ingrese observaciones sobre la orden" name="observation" value='' id="observation").w-100 #{order.orderData.observation}
+            //-     br
+            //- input.d-none(type="number" name="patientsId" id="patients_id" value=`${order.patient.id}`)    
+    div.modal-footer
+        button.btn.btn-outline-warning(type="submit" form="formNew" data-bs-dismiss="modal") Guardar
+        button.btn.btn-outline-warning(type="reset" data-bs-dismiss="modal") Cancelar
+script(src="/js/newResult.js")

@@ -1,0 +1,108 @@
+//TODO recorrer orden para mostrar / oucltar muestra requerida
+//- extends layout.pug
+block content-1
+- var checked
+- var visible ='d-none'
+- var statusName = ['Inactiva', 'Ingresada', 'Toma Muestra', 'Analitica', 'Para firma', 'Firmada']
+
+div.card
+    div.card-header(style="max-height:4em; overflow:auto")
+        h4(class="text-center") Editando  orden #{order.orderData.id} del paciente: #{order.patient.last_name}, #{order.patient.first_name}
+    div.card-body
+        form(id="formNewOrder" method="POST" action='/order/edit')
+            input(type="hidden" name="id" value= order.orderData.id)
+            div.form-group
+                label(class="form-label" for="statusDiv") Estado de la Orden
+                div.form-control(style="height:2.5em; overflow:auto;" id="statusDiv")
+                    each data in statusName
+                        label.me-2.sample-radio(for=`${data}` id=`${data}` name="status" ) #{data}
+                            input(type="radio" id=`${data}` name="status" value=`${data}` checked = (data == order.orderData.status))         
+            div.d-flex.flex-row
+                div.form-group.w-50.me-1
+                    label(class="form-label" for="doctorDiv" ) Medico:
+                    div.form-control(style="height:12em; overflow:auto;" id="doctorDiv")
+                        table(id="doctorSelect" class="table")
+                            thead
+                                tr
+                                    th 
+                                    th 
+                            tbody
+                                each data in order.doctors                                    
+                                    - checked = data.id == order.orderData.doctorsId                                    
+                                        tr
+                                            td
+                                                input(type="radio" name="doctorsId" value=data.id checked=(data.id == order.orderData.doctorsId))                                            
+                                            td
+                                                p() licencia: #{data.license} #{data.first_name} #{data.last_name}    
+                div.form-group.w-50.ms-1
+                    label(class="form-label" for="diagnosisDiv" ) Diagnostico:
+                    div.form-control(style="height:12em; overflow:auto;" id="diagnosisDiv")
+                        table(id="diagnosisSelect" class="table")                    
+                            thead(class="")
+                                tr
+                                    th 
+                                    th 
+                            tbody                
+                                each data in order.diagnosis 
+                                    tr
+                                        td 
+                                            input(type="radio" name="diagnosisId" value=`${data.id}` checked = (data.id == order.orderData.diagnosisId)) 
+                                        td
+                                            p() #{data.codigo} #{data.name}
+            div.form-group
+                label(class="form-label" for="samplesDiv") Muestras Requerida:  marque si el paciente entrega ahora muestra
+                div.form-control(style="height:13em; overflow:auto;" id="samplesDiv")
+                    .d-none#noMuestras No hay Estudios seleccionados, no tiene muestras para seleccion..                    
+                    each data in order.samplesType
+                        - const sampleInfo = order.orderData.samples.find(sample => sample.samples_type_id === data.id)
+                        - var isRequired = order.orderData.samples.some(sample => sample.samples_type_id === data.id)
+                        - var status = sampleInfo ? sampleInfo.status : 'No disponible'
+                        - var isChecked = false
+                        - var visible = isRequired ? '' : 'd-none'
+                        - var statusClass =''
+                        case status
+                            when 'Requerida'
+                                - statusClass = 'required-class'                                
+                            when 'Recibida'
+                                - statusClass = 'received-class'
+                                - isChecked = true
+                            default
+                                - statusClass = 'default-class'
+
+                        p #{sampleInfo ? sampleInfo.id : 'No disponible'}
+                        //- p #{sampleInfo ? sampleInfo.id : 'No disponible'}
+                        p #{sampleInfo ? sampleInfo.status : 'No disponible'}
+                        //- p #{JSON.stringify(sampleInfo ? sampleInfo.sampleType : {})}
+
+                        p #{JSON.stringify(sampleInfo)}
+                        label.me-2.sample-radio(class=visible for=`sample${data.id}` id=`labelSample${data.id}` name="sampleLabel" data-id=`${data.id}`) #{data.name} 
+                            input(type="checkbox" id=`sample${data.id}` name="samples[]" value=`${data.id}` data-id=`${data.id}` checked = isChecked)  
+
+                        input.d-none(type="checkbox" id=`sampleRequired${data.id}` name="samplesRequired[]" value=`${data.id}` data-id=`${data.id}` checked=isRequired) 
+
+            div.form-group
+                label(class="form-label" id="examsDiv") Examenes:                
+                div.form-control(style="height:15em; overflow:auto;" id="examsDiv")
+                    table(id="examsSelect" class="tableFixed")                    
+                        thead
+                            tr
+                                th 
+                                th 
+                        tbody
+                            each data in order.exams
+                                - var isRequired = order.orderData.studies.some(studie => studie.exams_id === data.id)   //- { id: 26, exams_id: 1, orders_id: 16, exam: [Object] },                                
+                                tr
+                                    td                              
+                                        input(type="checkbox" id=`exams${data.id}` name="exams[]" value=`${data.id}` data-sample=`${data.sampleType.id}` checked = isRequired)
+                                    td
+                                        p() #{data.nbu} #{data.detail}    
+            div.form-group
+                label.mt-2 Observaciones:
+                textarea.form-control(rows="2" cols="150" placeholder="Ingrese observaciones sobre la orden" name="observation" value='' id="observation").w-100 #{order.orderData.observation}
+                br
+            input.d-none(type="number" name="patientsId" id="patients_id" value=`${order.patient.id}`)    
+    div.modal-footer
+        button.btn.btn-outline-warning(type="submit" form="formNewOrder" data-bs-dismiss="modal") Guardar 
+        button.btn.btn-outline-warning(type="reset" data-bs-dismiss="modal") Cancelar
+script(src="/js/newOrder.js")
+

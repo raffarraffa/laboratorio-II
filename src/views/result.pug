@@ -1,0 +1,452 @@
+//- views/result.pug
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Resultados de Análisis Clínicos
+        style.
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+
+            }
+            .header {
+                width: 100%;
+                background: white;
+                border-bottom: 1px solid #ddd;
+                padding: 10px 20px;                
+                display: flex;
+                justify-content: space-between; /* Espacia los elementos igualmente */
+                align-items: center;
+                z-index: 1000;
+            }
+            .header h1 {
+                font-size: 24px;
+                margin: 0;
+            }
+            .header p {
+                margin: 5px 0;
+                font-size: 14px;
+            }
+            #logo{
+                flex: 0 0 auto;                
+
+            }
+            #logo img {
+                width: 120px;                
+
+            }
+            #header{
+                flex: 1;
+                padding-left: 20px; 
+            }
+            .section {
+                margin-bottom: 20px;
+
+            }
+            .section h2 {
+                font-size: 18px;
+                border-bottom: 1px solid #000;
+                padding-bottom: 15px;
+                margin-bottom: 10px;
+            }
+            .section-first h2 {
+                font-size: 18px;
+                border-bottom: 1px solid #000;
+                padding-bottom: 5px;
+                margin-bottom: 10px;
+            }
+            .page-break-before h2 {
+                font-size: 18px;
+                border-bottom: 1px solid #000;
+                padding-bottom: 5px;
+                margin-bottom: 10px;
+            }
+            .page-break-after h2 {
+                font-size: 18px;
+                border-bottom: 1px solid #000;
+                padding-bottom: 5px;
+                margin-bottom: 10px;
+            }
+
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                /*gap: 10px;*/
+                page-break-inside: avoid;
+            }
+            .grid-item {
+
+                /*padding: 8px;*/
+                text-align: left;
+            }
+            .grid-header {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            @media print {
+                .header {
+                    position: running(header);
+                }
+                body {
+                    margin: 0;
+                }
+                .section {
+                    page-break-inside: avoid;                
+
+                }
+                .section-first {
+                    page-break-inside: avoid;                
+                }
+                .page-break-before {
+                    page-break-inside: avoid;
+                    page-break-before: always; /* Fuerza un salto de página antes de este elemento */
+                    padding-top : 150px;
+                }                
+                .page-break-after {
+                    page-break-inside: avoid;
+                    page-break-after: always; /* Fuerza un salto de página después de este elemento */
+
+                }
+            }
+            @page {
+                margin-top: 20mm; 
+            }
+
+            @page :first {
+                margin-top: 10mm; 
+            }
+            @page :first {
+                margin-top: 10mm;                 
+            }
+    body
+
+    .header
+        div#logo
+            img.nav-logo(src="data:image/octet-stream;base64,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b20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1sbnM6R0lNUD0iaHR0cDovL3d3dy5naW1wLm9yZy94bXAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9ImdpbXA6ZG9jaWQ6Z2ltcDo0MjA4NTk2OS1iYjk1LTRhYTUtYmI5YS00OTNjZmEzMDE5MDgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6ZGM2MmNlOGEtODFlNi00YTliLWFjNGMtNTkzYWJiOTI4NWY2IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MGYwYzgzMDQtZDFmNy00MTI1LWI0OGEtZWRhNTYwZWQ3YWQyIiBHSU1QOkFQST0iMi4wIiBHSU1QOlBsYXRmb3JtPSJXaW5kb3dzIiBHSU1QOlRpbWVTdGFtcD0iMTcxNjM1MTE4NTYwNDIzNyIgR0lNUDpWZXJzaW9uPSIyLjEwLjM2IiBkYzpGb3JtYXQ9ImltYWdlL3dlYnAiIHRpZmY6T3JpZW50YXRpb249IjEiIHhtcDpDcmVhdG9yVG9vbD0iR0lNUCAyLjEwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI0OjA1OjIyVDAxOjEzOjAxLTAzOjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyNDowNToyMlQwMToxMzowMS0wMzowMCI+IDx4bXBNTTpIaXN0b3J5PiA8cmRmOlNlcT4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDpjaGFuZ2VkPSIvIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjkyOGVhNGYyLWViMmYtNGJiZC1hYzY0LTdkNmJmMmIxZmJmMSIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iR2ltcCAyLjEwIChXaW5kb3dzKSIgc3RFdnQ6d2hlbj0iMjAyNC0wNS0yMlQwMToxMzowNSIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPD94cGFja2V0IGVuZD0idyI/Pg==" alt="Logo Laboratorio Analisis")      
+        div#header          
+            h1 Laboratorio de Análisis Clínicos
+            p Fecha: #{fechaLocal} 
+            p Paciente: #{patient.last_name}, #{patient.first_name}
+            //- p Edad: #{edad}
+            p Género: #{patient.sex}
+            p Médico: #{doctor.last_name}, #{doctor.first_name}. Mat: #{doctor.license} 
+
+    each studie in studies    
+        //- .section.page-break-before    
+        .section-first                
+            h2 Cod: #{studie.exam.nbu},  #{studie.exam.detail}  
+            .grid-container
+                .grid-item.grid-header Determinacion
+                .grid-item.grid-header Resultado
+                .grid-item.grid-header Valores de Referencia
+
+                each item in studie.results
+                    .grid-item #{item.determination.name }
+                    .grid-item #{item.value} #{item.referenceValue.unit.unit}
+                    .grid-item Min: #{item.referenceValue.value_ref_min} - Max. #{item.referenceValue.value_ref_max}
+
+        //-     //- .section.page-break-after
+        //- .section
+        //-     h2 Bioquímica
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in bioquimica
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+
+        //- .section
+        //-     h2 Uroanálisis1
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis2
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis3
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis4
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis5
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis6
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis7
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}
+        //- .section
+        //-     h2 Uroanálisis
+        //-     .grid-container
+        //-         .grid-item.grid-header Prueba
+        //-         .grid-item.grid-header Resultado
+        //-         .grid-item.grid-header Valores de Referencia
+        //-         each item in uroanalisis
+        //-             .grid-item #{item.prueba}
+        //-             .grid-item #{item.resultado}
+        //-             .grid-item #{item.referencia}

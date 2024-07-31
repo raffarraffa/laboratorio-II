@@ -1,0 +1,155 @@
+/* stuilopara admin */
+
+
+.box.scroll-container {
+    height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    flex: 1;
+    overflow: auto;
+    /* border: 1px solid #ddd; */
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+}
+
+.box.scroll-container {
+    scrollbar-width: thin;
+    scrollbar-darkshadow-color: #28a745;
+    /* Opciones: auto, thin */
+    scrollbar-color: #664df3 #cfcedd;
+    /* Primer color es el pulgar, segundo color es el riel */
+}
+
+.box.scroll-container {
+    /* scrollbar-width: none; */
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+}
+
+/* Estilo para el riel de la barra de desplazamiento */
+.box.scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Color del fondo del riel */
+    border-radius: 10px;
+    /* Radio de borde para el riel */
+}
+
+/* Estilo para el pulgar de la barra de desplazamiento */
+.box.scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Color del pulgar */
+    border-radius: 10px;
+    /* Radio de borde para el pulgar */
+}
+
+/* Estilo para el pulgar al pasar el cursor */
+.box.scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* Color del pulgar al pasar el cursor */
+}
+
+.box {
+    background-color: #fff;
+    /* Opcional: Color de fondo para las cajas */
+    /* margin-bottom: 10px; */
+    /* Opcional: Espacio entre cajas */
+}
+
+#adminContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-block: 5px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    /* flex: 1; */
+    overflow: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+
+}
+
+#adminRow {
+    height: 30%;
+    padding-inline: 5px;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.col2 {
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+
+.colHead {
+    height: 50px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.box.colHead {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+/* Define el área de contenido en la parte inferior */
+#contentArea {
+    flex: 2;
+    border-top: 1px solid #ddd;
+    background-color: #1667be56;
+    border-radius: 10px;
+}
+
+.adminLi {
+    font-size: 0.75rem;
+    /* display: inline-block; */
+    max-width: 95%;
+    /* Ajusta el ancho máximo según sea necesario */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: transform 0.3s;
+    list-style-position: inside;
+    padding-left: 0px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.adminLi i {
+    font-size: 16px;
+    color: black;
+
+}
+
+.adminLi::before {
+    font-weight: 900;
+    transform: translateY(-50%);
+    color: black;
+    font-size: 1.5em;
+}
+
+.adminLi:hover {
+    border-radius: 12px;
+    transform: scale(1.05);
+    padding: 1px;
+    background-color: rgba(22, 190, 36, 0.192);
+    opacity: 0.9;
+    color: rgb(230, 0, 0);
+}
+
+.adminLi:hover i {
+    border-radius: 12px;
+    transform: scale(1.05);
+    padding: 1px;
+    color: rgb(230, 0, 0);
+}

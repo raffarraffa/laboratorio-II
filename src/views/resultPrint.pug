@@ -1,0 +1,120 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Resultados de Análisis Clínicos
+        style.
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 20px;
+                position: fixed;
+                width: 100%;
+                top: 0;
+                background: white;
+                z-index: 1000;
+            }
+            .header h1 {
+                font-size: 24px;
+                margin: 0;
+            }
+            .header p {
+                font-size: 14px;
+                margin: 5px 0;
+            }
+            .section {
+                margin-top: 150px; /* Adjust this value to fit your header size */
+                margin-bottom: 20px;
+            }
+            .section h2 {
+                font-size: 18px;
+                border-bottom: 1px solid #000;
+                padding-bottom: 5px;
+                margin-bottom: 10px;
+            }
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                page-break-inside: avoid;
+            }
+            .grid-item {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
+            }
+            .grid-header {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            @media print {
+                .header {
+                    position: running(header);
+                }
+                body {
+                    margin: 0;
+                }
+                .section {
+                    page-break-inside: avoid;
+                }
+            }
+    body
+        .header
+            h1 Laboratorio de Análisis Clínicos
+            p Fecha: 20/07/2024
+            p Paciente: Juan Pérez
+            p Edad: 30 años
+            p Género: Masculino
+            p Médico: Dra. María López
+
+        .section
+            h2 Hematología
+            .grid-container
+                .grid-item.grid-header Prueba
+                .grid-item.grid-header Resultado
+                .grid-item.grid-header Valores de Referencia
+                .grid-item Hemoglobina
+                .grid-item 13.5 g/dL
+                .grid-item 13.0-17.0 g/dL
+                .grid-item Hematocrito
+                .grid-item 40%
+                .grid-item 38-50%
+                .grid-item Leucocitos
+                .grid-item 6,000 /µL
+                .grid-item 4,000-10,000 /µL
+
+        .section
+            h2 Bioquímica
+            .grid-container
+                .grid-item.grid-header Prueba
+                .grid-item.grid-header Resultado
+                .grid-item.grid-header Valores de Referencia
+                .grid-item Glucosa
+                .grid-item 90 mg/dL
+                .grid-item 70-100 mg/dL
+                .grid-item Colesterol Total
+                .grid-item 180 mg/dL
+                .grid-item < 200 mg/dL
+                .grid-item Triglicéridos
+                .grid-item 150 mg/dL
+                .grid-item < 150 mg/dL
+
+        .section
+            h2 Uroanálisis
+            .grid-container
+                .grid-item.grid-header Prueba
+                .grid-item.grid-header Resultado
+                .grid-item.grid-header Valores de Referencia
+                .grid-item pH
+                .grid-item 6.0
+                .grid-item 5.0-7.0
+                .grid-item Densidad
+                .grid-item 1.015
+                .grid-item 1.010-1.030
+                .grid-item Proteínas
+                .grid-item Negativo
+                .grid-item Negativo
