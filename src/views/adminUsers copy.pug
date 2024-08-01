@@ -1,0 +1,48 @@
+extends layout.pug
+block content-1
+    div.container#mainContainer
+        div.innerContainer                             
+            div(class="accordion" id="userAdminTabla")
+                //- ciclospor users
+                each dato in datos    
+                    div(class="accordion-item")
+                        h2(class="accordion-header")
+                            button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=`#user${dato.id}Div` aria-expanded="false" aria-controls=`user${dato.id}Div`)
+                                Accordion #{dato.id} #{dato.firstName} #{dato.lastName}
+                        div(id=`user${dato.id}Div` class="accordion-collapse collapse" data-bs-parent="#userAdminTabla" style="")
+                            div(class="accordion-body sector-data")
+                                table.table.table-striped.table-bordered.table-responsive
+                                    thead.table-dark
+                                        tr
+                                            th.cell.w-15 Admin
+                                            th.cell.w-40 Nombre 
+                                            th.cell.w-45 Observacion
+                                    tbody 
+                                        tr
+                                            td.cell
+                                            td.cell
+                                            td.cell
+
+
+
+
+block scripts                                
+    script(src="/js/tablaUsuarios.js")
+
+
+//- 
+    dataValues: {
+        id: 1,
+        firstName: 'Rafa',
+        lastName: 'Lopez',
+        document: '12345678',
+        phone: '1234567890',
+        email: 'admin@admin.com',
+        address: '123 Main St',
+        password: 'eyJhbGciOiJIUzI1NiJ9.MTIzNA.ioZyBcC5RtUWu4FuTCpy4P8Q72t7Z4hwtphHffR0Z_g',
+        active: 1,
+        entryDate: '2024-05-16',
+        citysId: 109,
+        city: [City],
+        profiles: [Array]
+

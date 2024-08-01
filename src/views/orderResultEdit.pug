@@ -1,0 +1,64 @@
+//- extends layout.pug
+block content-1
+- var checked
+- var visible ='d-none'
+- var statusOrderName = [ 'Analitica', 'Para firma', 'Firmada']
+- var statusSampleName =[ 'Requerida', 'Recibida', 'Procesada', 'Rechazada']
+- var fechaOrden = new Date(order.orderData.created_at);
+- var editable=order.orderData.editable;
+div.card
+    div.card-header.p-0.mt-1
+        h1.text-center Orden #{order.orderData.id}
+        p.p-0.m-0.text-center Fecha Orden: #{order.fechaLocal}                          
+    div.card-body
+        form(id="formNewOrder" method="POST" action='/order/edit')
+            div.d-flex.flex-row
+                div.form-group.w-50.me-1
+                    label(class="form-label" for="pacienteDiv" ) Detalle:
+                    div.form-control(style="height:8em; overflow:auto;" id="pacienteDiv")
+                        p.p-0.m-0 Paciente: #{order.patient.last_name}, #{order.patient.first_name}. DNI: #{order.patient.document}. Edad: #{order.patient.edad}
+                        p.p-0.m-0 Solicitado:  #{order.doctorData.last_name}, #{order.doctorData.first_name}. Matricula: #{order.doctorData.license}                        
+                        p.p-0.m-0 Diagnostico: #{order.orderData.diagnosis.codigo} , #{order.orderData.diagnosis.name}   
+                div.form-group.w-50.me-1
+                    label(class="form-label" for="pacienteDiv" ) Examenes:
+                    div.form-control(style="height:8em; overflow:auto;" id="pacienteDiv")                        
+                        each studie in order.orderData.studies
+                            p.p-0.m-0 #{studie.exam.detail}                        
+            input(type="hidden" name="orderId" value= order.orderData.id)
+            div.form-group.mt-2
+                div.form-group
+                    label(class="form-label" for="statusDiv") Estado de la Orden
+                    div.form-control.w-100(style="height:2.5em; overflow:auto;" id="statusDiv")
+                        each data in statusOrderName
+                            //- label.me-2.sample-radio(for=`${data}` id=`${data}` name="status" ) #{data}
+                            input(type="radio" id=`${data}` name="status" value=`${data}` checked = (data == order.orderData.status) )
+                            label.me-2.sample-radio(for=`${data}` id=`${data}` name="status" ) #{data}
+            div.form-group.d-none
+                div.form-group
+                    label(class="form-label" for="samplesDiv") Muestras 
+                    div.form-control(style="height:auto; overflow:auto;" id="samplesDiv")
+                        each data in order.orderData.samples
+                            div.form-control.m-0.my-1( id="statusDiv")
+                                label.me-2(class="form-label" for="statusDiv") <b> #{data.sampleType.name}  #{data.status}</b>                            
+                                each statusData in statusSampleName
+                                    input(type="radio" id=`${statusData}-${data.id}` name=`samples[${data.id}]` data-id=`${data.id}` value=`{"${data.id}":"${statusData}"}` checked = (statusData == data.status) hidden)                                     
+                                    label.m-0.sample-radio(for=`${statusData}-${data.id}` ) #{statusData}
+            div.form-group
+                label.mt-2 Observaciones:
+                textarea.form-control(rows="2" cols="150" placeholder="Ingrese observaciones sobre la orden" name="observation" value='' id="observation").w-100 #{order.orderData.observation}
+            label.mt-2.w-100(for="resultDiv") Resultados:
+            div.form-control#resultDiv                
+                div.form-group.w-100()
+                    each data in order.orderData.studies
+                        label.form-label.w-100(for=`resultDiv${data.id}`) #{data.exam.detail}                     
+                        div.form-control.w-100(id=`#resultDiv${data.id}`)
+                            each result in data.results
+                                div.input-group.my-1
+                                    input.form-control.w-15(type="number" name=`results['${result.id}']` value=`${result.value}` aria-label="Dollar amount (with dot and two decimal places)")
+                                    span.input-group-text.w-85 #{result.determination.name}
+                                        small.form-text.text-muted.ms-2.p-2.align-midle   (Valores ref: min: #{result.referenceValue.value_ref_min} max: #{result.referenceValue.value_ref_max} #{result.referenceValue.observation})
+            input.d-none(type="number" name="patientsId" id="patients_id" value=`${order.patient.id}`)    
+    div.modal-footer
+        button.btn.btn-outline-warning(type="submit" form="formNewOrder" data-bs-dismiss="modal") Guardar 
+        button.btn.btn-outline-warning(type="reset" data-bs-dismiss="modal") Cancelar
+script(src="/js/editOrder.js")

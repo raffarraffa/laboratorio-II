@@ -7,12 +7,17 @@ import 'dotenv/config';
 class Controller {
 
     constructor() {
-        const dbName = process.env.DB_NAME_REMOTO;
-        const dbUser = process.env.DB_USER_REMOTO;
-        const dbPassword = process.env.DB_PASSWORD_REMOTO;
-        const dbHost = process.env.DB_HOST_REMOTO;
-        const dbDialect = process.env.DB_DIALECT_REMOTO;
+        const DEV = process.env.DEV === 'true' ? true : false;
+        const dbName = process.env.DB_NAME;
+        const dbUser = process.env.DB_USER;
+        const dbPassword = process.env.DB_PASSWORD;
+        const dbHost = process.env.DB_HOST;
+        const dbDialect = process.env.DB_DIALECT;
+
+        // Inicializar la base de datos
         this.dataBase = new DataBase(dbName, dbUser, dbPassword, { host: dbHost, dialect: dbDialect });
+        //        this.dataBase = new DataBase(dbName, dbUser, dbPassword, { host: dbHost, dialect: dbDialect, logging: false });
+        // Inicializar los modelos
         this.models = InitModels.getModels(this.dataBase.sequelize);
         this.class = Utils.getClassName();
     }

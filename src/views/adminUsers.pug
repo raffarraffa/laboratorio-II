@@ -1,0 +1,78 @@
+
+//- 
+    dataValues: {
+        id: 1,
+        firstName: 'Rafa',
+        lastName: 'Lopez',
+        document: '12345678',
+        phone: '1234567890',
+        email: 'admin@admin.com',
+        address: '123 Main St',
+        password: 'eyJhbGciOiJIUzI1NiJ9.MTIzNA.ioZyBcC5RtUWu4FuTCpy4P8Q72t7Z4hwtphHffR0Z_g',
+        active: 1,
+        entryDate: '2024-05-16',
+        citysId: 109,
+        city: [City],
+        profiles: [Array]
+
+
+extends layout.pug
+block content-1
+    div.h-100.p-2
+        div.p-2(style="width: 100%;").h-100.overflow-auto
+            div 
+            div.table-responsive
+                table#tablaUsuarios.table.table-striped.table-hover
+                    thead
+                        tr
+                            th.text-center(style="width: 20em;") Acciones
+                            th.text-center(style="width: 80em;") Nombres
+                            th.text-center(style="width: 80em;") Apellidos
+                            th.text-center(style="width: 80em;") Doc.
+                            th.text-center(style="width: 80em;") Telefono 
+                            th.text-center(style="width: 80em;") Emails 
+                            th.text-center(style="width: 80em;") Direcccion 
+                            th.text-center(style="width: 80em;") Ciudad 
+                            th.text-center(style="width: 80em;") Activo
+                            th.text-center(style="width: 80em;") Clave
+                            th.text-center(style="width: 80em;") Perfiles 
+                    tbody 
+                    each user in datos
+                        tr 
+                            td.text-center(style="width: 20em;") 
+                                button.btn.btn-outline-primary.btn-order.p-1.mx-0.my-1.mx-1( title="Editar Orden" onclick=`editOrder(${user.id})`) Admin Order
+                                    svg.px-2(xmlns="http://www.w3.org/2000/svg" width="40" height="30" fill="currentColor" class="bi bi-eyedropper" viewBox="0 0 16 16")
+                                        path(d="M13.354.646a1.207 1.207 0 0 0-1.708 0L8.5 3.793l-.646-.647a.5.5 0 1 0-.708.708L8.293 5l-7.147 7.146A.5.5 0 0 0 1 12.5v1.793l-.854.853a.5.5 0 1 0 .708.707L1.707 15H3.5a.5.5 0 0 0 .354-.146L11 7.707l1.146 1.147a.5.5 0 0 0 .708-.708l-.647-.646 3.147-3.146a1.207 1.207 0 0 0 0-1.708zM2 12.707l7-7L10.293 7l-7 7H2z")
+                                    svg(xmlns="http://www.w3.org/2000/svg" width="40" height="30" fill="currentColor" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16")
+                                        path(d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z")
+                                    //- svg(xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16")
+                                        path(d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001")
+                            td.text-center(style="width: 80em;") 
+                            #{user.firstName}
+                            td.text-center(style="width: 80em;") 
+                            #{user.lastName}
+                            td.text-center(style="width: 80em;")
+
+                            #{user.document}
+                            td.text-center(style="width: 80em;") 
+                            #{user.phone}
+                            td.text-center(style="width: 80em;") 
+                            #{user.email}
+                            td.text-center(style="width: 80em;") 
+                            #{user.address}
+                            td.text-center(style="width: 80em;") 
+                            #{user.city.name}
+                            td.text-center(style="width: 80em;") 
+                            #{user.active}
+                            td.text-center(style="width: 80em;")
+
+                            #{user.password}
+                            td.text-center(style="width: 80em;") 
+                            //-    each profile in user.profiles
+                                p #{profile.name} 
+
+
+
+block scripts                                
+    script(src="/js/tablaUsuarios.js")
+

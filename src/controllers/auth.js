@@ -4,13 +4,11 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const PASS_SECRET = process.env.PASS_SECRET || 'your-pass-secret-key';
 import userController from './user.js';
-
 class AuthController extends Controller {
     constructor() {
         super();
         this.class = Utils.getClassName();
         this.userController = new userController();
-        Utils.debug(this.class);
     }
 
     Test(req, res) {
@@ -34,7 +32,7 @@ class AuthController extends Controller {
                         lastName: user.last_name
                     };
                     res.cookie('authToken', authToken, { httpOnly: false, secure: true, maxAge: 3600000 });
-                    Utils.debug(`${this.class} autorizado`, this.class, true);
+
                     return next();
                 }
             }
@@ -45,6 +43,16 @@ class AuthController extends Controller {
                     const user = await this.userController.findByEmail(username);
                     console.log(user);
                     if (user && this.verifyPass(user, password)) {
+                        /*
+                        {
+                            id: 1,
+                            email: 'admin@admin.com',
+                            first_name: 'Rafa',
+                            last_name: 'Lopez',
+                            password: 'eyJhbGciOiJIUzI1NiJ9.MTIzNA.ecFEOIfC_eow1IJuRguQZEfmcTf4gY1UqJ72XYio3co',
+                            profiles: [ { access_auth: 1, name: 'Administrator', license: null } ]
+                        }
+                        */
                         req.session.user = {
                             userId: user.id,
                             roles: user.profiles,
@@ -76,8 +84,7 @@ class AuthController extends Controller {
             return res.redirect('/');
 
         }
-    }
-    getAuth(req, res) {
+    } etAuth(req, res) {
         res.render('login.pug');
     }
     createToken(userAuth) {
@@ -112,7 +119,7 @@ class AuthController extends Controller {
         try {
 
             const id = req.params.id;
-            Utils.debug(id, this.class, true);
+
             const auth = await this.models.auth.findByPk(
                 id,
                 {
@@ -125,7 +132,7 @@ class AuthController extends Controller {
             if (!auth) {
                 res.status(404).json({ error: `${this.class} no encontrado` });
             } else {
-                Utils.debug(auth.dataValues, this.class, true);
+
                 res.status(200).json(auth);
             }
         } catch (error) {

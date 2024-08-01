@@ -1,0 +1,53 @@
+//TODO
+
+# 10 tiempo demora cada examen -> fecha de entrega resultados
+# 1 al mostrear ordenes , filtrar y no mostrar EXAMS sin DETERMINATIONS
+#4 CRUD exams
+#3 CRUD deteminations
+#2 CRUD referenceValues
+#1 CRUD units
+#1 CRUD Diagnosticos
+#2 El estado de la orden deb ser automatico buscar como resolverlo
+#2 Etiqueta para muestras
+#1 Paciente -> edicion para permitir visualizr los borrados logicos (solo admins)
+#2 Mensajes SUCCESS y ERROR{
+    Create: orden, paciente, reference value, unit, determiantion, exam
+    Update: orden, paciente, reference value, unit, determiantion, exam
+    Delete: orden, paciente, reference value, unit, determiantion, exam   
+}
+#2 administracion usuarios
+#1 vistas segun roles, ocultar menus  A MEDIA
+
+
+//BUG 
+# 1 inicio y pacientes muestra lo mismo
+#1  ORDEN en menu no responde
+#1 boton en modo carga resutlados no repsonde
+
+//OK #1 ediciones en administración no andan
+
+
+//OK #1 login
+//OK #1 perfil usuario, boton salir session
+#1 proteccion rutas
+
+// BUG : cuando intento editar una orden, si el examen no tien determianciones , arroja erro rpor intentar recorre run array -> null
+    No se hicieron cambios, no se actualiza la muestra 9
+    ************ 238 ****************
+    ok
+    file:///D:/ESTUDIO/tuds%202024/lab%20II/LIS-Final/src/controllers/result.js:110
+            const updates = Object.entries(results).map(([key, value]) => {
+                                ^
+
+    TypeError: Cannot convert undefined or null to object
+        at Function.entries (<anonymous>)
+        at ResultController.updateResult (file:///D:/ESTUDIO/tuds%202024/lab%20II/LIS-Final/src/controllers/result.js:110:32)
+        at OrderController.editOrder (file:///D:/ESTUDIO/tuds%202024/lab%20II/LIS-Final/src/controllers/order.js:380:26)
+        at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+////////////////////*************************************////////////////////////////
+Preceso creacion orden:
+
+Caso Paciente existe
+//OK busqueda paciente, seleccionar paciente -> crear orden. OK FALTA : validaciones y mensaje
+//OK Caso paciente : Buscr paciente,  -Z button cerear paciente -Crear pacient eocn orden
+//OK  paciente->crear_orden-> buscar_doctor-> sino encuentra creo doctor: return orden para paciente con doctor selected : falt avvalidacioen y mensaje
